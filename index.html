@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TypeRush ⚡ Addictive Mode</title>
+  <title>TypeRush ⚡</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -16,6 +16,11 @@
       flex-direction: column;
       align-items: center;
     }
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
     #game {
       background: #1e293b;
       padding: 2rem;
@@ -24,17 +29,11 @@
       width: 100%;
       max-width: 500px;
       box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-      position: relative;
-    }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
     }
     #word {
       font-size: 2rem;
       font-weight: bold;
       margin-bottom: 1rem;
-      transition: color 0.2s;
     }
     input {
       padding: 1rem;
@@ -67,15 +66,6 @@
     button:hover {
       background: #0ea5e9;
     }
-    #feedback {
-      position: absolute;
-      top: 10px;
-      right: 20px;
-      font-weight: bold;
-      font-size: 1rem;
-    }
-    .green { color: #22c55e; }
-    .red { color: #ef4444; }
   </style>
 </head>
 <body>
@@ -87,7 +77,6 @@
       <div>Score: <span id="score">0</span></div>
       <div>Time: <span id="time">30</span>s</div>
     </div>
-    <div id="feedback"></div>
     <div id="end">
       <h2>Time's Up!</h2>
       <p>Your final score: <span id="finalScore"></span></p>
@@ -102,20 +91,17 @@
     const timeEl = document.getElementById('time');
     const endEl = document.getElementById('end');
     const finalScoreEl = document.getElementById('finalScore');
-    const feedbackEl = document.getElementById('feedback');
 
     const words = [
-      'type', 'code', 'power', 'logic', 'stack', 'build', 'vercel', 'script', 'react',
-      'flash', 'focus', 'cloud', 'mouse', 'track', 'click', 'shift', 'debug', 'shift',
-      'system', 'launch', 'upload', 'deploy', 'output', 'input', 'socket', 'event', 'server'
+      'hype', 'type', 'code', 'speed', 'react', 'nextjs', 'power', 'focus',
+      'keyboard', 'rocket', 'flash', 'click', 'vercel', 'swift', 'brain', 'game',
+      'build', 'deploy', 'launch', 'debug', 'stack', 'logic', 'script', 'shift'
     ];
 
     let score = 0;
     let time = 30;
-    let timer;
     let currentWord = '';
-    let streak = 0;
-    let difficulty = 1; // will increase
+    let timer;
 
     function randomWord() {
       return words[Math.floor(Math.random() * words.length)];
@@ -129,20 +115,11 @@
 
     function updateScore() {
       score++;
-      streak++;
-      if (streak % 5 === 0) {
-        time += 2;
-        flashMessage('+2s Streak!', 'green');
-      }
-      if (score % 10 === 0) {
-        difficulty++;
-        flashMessage('Level Up!', 'green');
-      }
       scoreEl.textContent = score;
     }
 
     function updateTime() {
-      time -= 1;
+      time--;
       timeEl.textContent = time;
       if (time <= 0) {
         clearInterval(timer);
@@ -150,19 +127,8 @@
       }
     }
 
-    function flashMessage(msg, type) {
-      feedbackEl.textContent = msg;
-      feedbackEl.className = type;
-      setTimeout(() => {
-        feedbackEl.textContent = '';
-        feedbackEl.className = '';
-      }, 1200);
-    }
-
     function startGame() {
       score = 0;
-      streak = 0;
-      difficulty = 1;
       time = 30;
       scoreEl.textContent = score;
       timeEl.textContent = time;
@@ -182,14 +148,11 @@
     inputEl.addEventListener('input', () => {
       if (inputEl.value.trim().toLowerCase() === currentWord.toLowerCase()) {
         updateScore();
-        flashMessage('+1 Point', 'green');
         showNewWord();
-      } else if (!currentWord.startsWith(inputEl.value.trim().toLowerCase())) {
-        flashMessage('❌ Wrong!', 'red');
-        streak = 0;
       }
     });
 
+    // Start game on load
     window.onload = startGame;
   </script>
 </body>
