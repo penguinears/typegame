@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TypeRush ⚡</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    #game {
+      background: #1e293b;
+      padding: 2rem;
+      border-radius: 1rem;
+      text-align: center;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+    #word {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    input {
+      padding: 1rem;
+      font-size: 1.2rem;
+      width: 100%;
+      border: none;
+      border-radius: 0.5rem;
+      outline: none;
+    }
+    #stats {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+      font-size: 1rem;
+    }
+    #end {
+      margin-top: 1rem;
+      display: none;
+    }
+    button {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      background: #38bdf8;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #0ea5e9;
+    }
+  </style>
+</head>
+<body>
+  <div id="game">
+    <h1>TypeRush ⚡</h1>
+    <div id="word">loading...</div>
+    <input type="text" id="input" autocomplete="off" autofocus />
+    <div id="stats">
+      <div>Score: <span id="score">0</span></div>
+      <div>Time: <span id="time">30</span>s</div>
+    </div>
+    <div id="end">
+      <h2>Time's Up!</h2>
+      <p>Your final score: <span id="finalScore"></span></p>
+      <button onclick="startGame()">Play Again</button>
+    </div>
+  </div>
+
+  <script>
+    const wordEl = document.getElementById('word');
+    const inputEl = document.getElementById('input');
+    const scoreEl = document.getElementById('score');
+    const timeEl = document.getElementById('time');
+    const endEl = document.getElementById('end');
+    const finalScoreEl = document.getElementById('finalScore');
+
+    const words = [
+      'hype', 'type', 'code', 'speed', 'react', 'nextjs', 'power', 'focus',
+      'keyboard', 'rocket', 'flash', 'click', 'vercel', 'swift', 'brain', 'game',
+      'build', 'deploy', 'launch', 'debug', 'stack', 'logic', 'script', 'shift'
+    ];
+
+    let score = 0;
+    let time = 30;
+    let currentWord = '';
+    let timer;
+
+    function randomWord() {
+      return words[Math.floor(Math.random() * words.length)];
+    }
+
+    function showNewWord() {
+      currentWord = randomWord();
+      wordEl.textContent = currentWord;
+      inputEl.value = '';
+    }
+
+    function updateScore() {
+      score++;
+      scoreEl.textContent = score;
+    }
+
+    function updateTime() {
+      time--;
+      timeEl.textContent = time;
+      if (time <= 0) {
+        clearInterval(timer);
+        endGame();
+      }
+    }
+
+    function startGame() {
+      score = 0;
+      time = 30;
+      scoreEl.textContent = score;
+      timeEl.textContent = time;
+      endEl.style.display = 'none';
+      inputEl.disabled = false;
+      inputEl.focus();
+      showNewWord();
+      timer = setInterval(updateTime, 1000);
+    }
+
+    function endGame() {
+      inputEl.disabled = true;
+      finalScoreEl.textContent = score;
+      endEl.style.display = 'block';
+    }
+
+    inputEl.addEventListener('input', () => {
+      if (inputEl.value.trim().toLowerCase() === currentWord.toLowerCase()) {
+        updateScore();
+        showNewWord();
+      }
+    });
+
+    // Start game on load
+    window.onload = startGame;
+  </script>
+</body>
+</html>
